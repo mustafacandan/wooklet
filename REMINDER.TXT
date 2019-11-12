@@ -1,0 +1,5 @@
+Things to consider when using git
+	- Try NOT using master branch
+	- Nname your commits as follows: https://chris.beams.io/posts/git-commit/
+	- Try to commit your every step. Commit your work as much as possible
+
