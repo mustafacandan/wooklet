@@ -2,6 +2,12 @@ from flask import current_app
 from app import queries as q
 from .exceptions import InvalidUsage
 
+
+class BookHandler:
+    @classmethod
+    def get_book(cls, id):
+        return q.get_book_by_id(id)
+
 class UserHandler:
     @classmethod
     def create_user(cls, form):
@@ -33,22 +39,13 @@ class UserHandler:
             if email:
                 user = q.get_user_by_email(email)
             
-            if user.check_password(password):
-                return user, None
+            if user:
+                if user.check_password(password):
+                    return user, None
             else:
-                return None, "Incorrect Password"
+                return None, "Incorrect Information"
 
 class FileHandler:
     @classmethod
     def ValidateImageType(extension):
         return extension in ['jpg', 'gif', 'png', 'jpeg']
-
-    @classmethod
-    def UploadFile():
-        f = request.files.get('upload')
-        extension = f.filename.split('.')[-1].lower()
-        if extension not in ['jpg', 'gif', 'png', 'jpeg']:
-            return upload_fail(message='Image only!')
-        f.save(os.path.join(app.config['UPLOADED_PATH'], f.filename))
-        url = url_for('uploaded_files', filename=f.filename)
-        return upload_success(url=url)

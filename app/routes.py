@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, request, redirect, render_template, send_from_directory, url_for
 from flask_login import login_user, logout_user, current_user, login_required
-from app.services.handlers import UserHandler as user_handler
+from app.services.handlers import UserHandler, BookHandler
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -34,7 +34,7 @@ def login():
         return render_template('login.html', form=form)
     else:
         if form.validate_on_submit():
-            user, err = user_handler.check_user_information(form)
+            user, err = UserHandler.check_user_information(form)
         if err:
             return 'incorrect information login', 400
         else:
@@ -54,10 +54,10 @@ def signup():
         return render_template('signup.html', form=form)
     else:
         if form.validate_on_submit():
-            user = user_handler.create_user(form)
+            user = UserHandler.create_user(form)
             login_user(user, remember=True, force=True)
-            return redirect(url_for('base.home')), 200
-    return redirect(url_for('base.home')), 200
+            return redirect(url_for('base.home'))
+    return redirect(url_for('base.home'))
 
 
 
@@ -84,12 +84,42 @@ def upload():
 
 @bp.route('/compose', methods=['GET', 'POST'])
 @login_required
-def compose():
+def book_list():
+    if request.method == 'GET':
+        # list all editable books
+        books = [
+            {
+                'title': 'Baslik',
+                'description': 'Kitapla ilgili aciklama yazisi',
+                'status': 'draft'
+            },  {
+                'title': 'Baslik2',
+                'description': '2 2Kitapla ilgili aciklama yazisi',
+                'status': 'draft'
+            },  {
+                'title': 'Baslik2',
+                'description': '2 2Kitapla ilgili aciklama yazisi',
+                'status': 'draft'
+            }
+        ]
+        # BookHandler.book
+        return render_template('book_list.html', books=books)
+
+@bp.route('/compose/new', methods=['GET', 'POST'])
+@login_required
+def compose_new():
     form = compose_form()
     if request.method == 'GET':
-        return render_template('compose.html', form=form)
+        
+        return render_template('compose_new.html', form=form)
     else:
         if form.validate_on_submit():
             return redirect(url_for('base.home')), 200
         # create article
         # return
+
+@bp.route('/next', methods=['POST'])
+@login_required
+def next():
+    text = request.form.get('text')
+    return "", 200
