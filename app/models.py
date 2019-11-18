@@ -43,7 +43,6 @@ class UserSchema(BaseSchema):
     is_active = fields.Bool(required=False, allow_none=False)
     is_verified = fields.Bool(required=False, allow_none=False)
     user_type = fields.Str(required=False, allow_none=False)
-    
     username = fields.Str(required=False, allow_none=True, unique=True)
     email = fields.Str(required=False, allow_none=True)
     password = fields.Str(required=True, allow_none=False, load_only=True)
@@ -53,14 +52,18 @@ class UserSchema(BaseSchema):
     date_of_birth = fields.Date(required=False, allow_none=True)
     photo_profile = fields.Str(required=False, allow_none=True)
     
-class Articles(BaseModel):
-    __tablename__ = 'articles'
+class Books(BaseModel):
+    __tablename__ = 'books'
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
     root_page_id = db.Column(UUID(as_uuid=True), db.ForeignKey('pages.id'), nullable=False)
-    title = db.Column(db.String(120), nullable=False, index=False)
+    title = db.Column(db.String(120), nullable=True, index=True)
+    status = db.Column(db.String(120), nullable=False, index=False, server_default='draft')
 
-class ArticleSchema(BaseSchema):
-    root_page_id = fields.UUID(required=True, allow_none=False)
-    title = fields.Str(required=True, allow_none=False)
+class BookSchema(BaseSchema):
+    root_page_id = fields.UUID(required=False, allow_none=True)
+    user_id = fields.UUID(required=False, allow_none=True)
+    title = fields.Str(required=False, allow_none=True)
+    status = fields.Str(required=False, allow_none=True)
 
 class Pages(BaseModel):
     __tablename__ = 'pages'
