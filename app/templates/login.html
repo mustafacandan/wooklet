@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+	<div class="warpper" style="width: 700px; margin: auto">
+		<h1>Login</h1>
+		<form method="post">
+            {{ form.csrf_token }}
+
+            <form class="dropdown-menu p-4">
+                <div class="form-group">
+                    {{ form.username_or_email.label(for="email") }}
+                    {{ form.username_or_email(class="form-control", for="email") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(for="password") }}
+                    {{ form.password(class="form-control", for="password") }}
+                    </div>
+                {{ form.submit(class="btn btn-light") }}
+            </form>
+            <br>
+        </form>
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+        <hr>
+        Are you new here? <a href="/signup"><button type="button" class="btn btn-light">Sign up now!</button></a>
+	</div>
+{% endblock %}
