@@ -70,9 +70,5 @@ def create_app(config_name=None):
     # CLI
     from app.cli.tune import cli as tune_cli
     app.cli.add_command(tune_cli)
-
-    if config_name == 'development':
-        from app.cli.play import cli as play_cli
-        app.cli.add_command(play_cli)
-
+    
     return app
