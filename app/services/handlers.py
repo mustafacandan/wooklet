@@ -1,9 +1,33 @@
 from flask import current_app
 from app import queries as q
 from .exceptions import InvalidUsage
-
+from flask_login import current_user
 
 class BookHandler:
+    @classmethod
+    def create_book(cls, request):
+        title = request.form.get('title')
+        description = request.form.get('text')
+        cover = request.form.get('cover')
+        book_data = {
+            'title': title,
+            'description': description,
+            'cover': cover
+        }
+        user_id = current_user.get_id()
+        if not user_id:
+            raise InvalidUsage('Login needed')
+
+        book = q.create_book(book_data, user_id)
+        if not book:
+            raise InvalidUsage('book error')
+
+        path = q.create_path(book.id)
+        if not path:
+            raise InvalidUsage('path error')
+
+        return path.id
+
     @classmethod
     def get_book(cls, id):
         return q.get_book_by_id(id)

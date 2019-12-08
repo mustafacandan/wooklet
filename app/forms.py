@@ -1,11 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, BooleanField, PasswordField
+from wtforms import StringField, SubmitField, SelectField, BooleanField, PasswordField, TextAreaField
 from wtforms.fields.html5 import DateField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 from wtforms.widgets import PasswordInput
 
 class compose_form(FlaskForm):
     title = StringField('Title')
+    text = TextAreaField('Description', [Length(max=3000)])
+    submit = SubmitField('Save')
+
+class compose_page_form(FlaskForm):
+    text = TextAreaField('Content', [Length(max=3000)])
     submit = SubmitField('Save')
 
 class login_form(FlaskForm):

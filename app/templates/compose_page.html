@@ -5,14 +5,24 @@
     <div class="warpper" style="width: 800px; margin: auto">
 
         <form id="editorForm" action="./next" method="post" id="identifier">
-            <div id="editor"></div>
-            <textarea name="text" style="display:none" id="hiddenArea"></textarea>
-        </form>
+            
+            {{ form.csrf_token }}
 
-        <div class="mt-5">
-            <button id="End" type="button" class="btn btn-light">End</button>
-            <span class="ml-5"></span>
+            <form class="dropdown-menu p-4">
+                {{ form.text.label }}
+                <div class="form-group" id="editor">
+                    {{ form.text(class="form-control", id="hiddenArea", style="display:none") }}
+                    </div>
+                </form>
+                <br>
+                
+            </form>
+            
+            <div class="mt-3"></div>
             <button id="next" type="button" class="btn btn-light">Next</button>
+            <button id="end" type="button" class="btn btn-light">End</button>
+            <button id="path" type="button" class="btn btn-light">Add Path</button>
+            <button id="connect" type="button" class="btn btn-light">Connect</button>
 
         </div>
 
@@ -52,11 +62,12 @@
                 // $.post( "/next", $( "#editorForm" ).serialize() );
 
                 $.ajax({
-                url: 'next',
+                url: '/compose/new',
                 type: 'POST',
-                data: { text: $("#editor").html() },
+                data: { text: quill.container.firstChild.innerHTML, title: $("#title").val() },
                 success: function(result) {
-                    window.location.href = '/compose';
+                    console.log(result)
+                    window.location.href = '/compose/'+result.path_id;
                 },
                 });
             }); 

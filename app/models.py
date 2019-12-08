@@ -19,8 +19,7 @@ class BaseSchema(Schema):
     updated_at = fields.Date(required=True, allow_none=False, dump_only=True)
 
 
-class Users(BaseModel, UserMixin):
-    __tablename__ = 'users'
+class User(BaseModel, UserMixin):
     is_active = db.Column(db.Boolean, nullable=False, default=True, server_default=db.text('true'))
     is_verified = db.Column(db.Boolean, nullable=True, default=False, server_default=db.text('false'))    
     user_type = db.Column(db.String(20), nullable=False, server_default="user")
@@ -33,6 +32,9 @@ class Users(BaseModel, UserMixin):
     date_of_birth = db.Column(db.Date, nullable=True)
     photo_profile = db.Column(db.String(250), nullable=True, index=False)
 
+    # relations
+    books = db.relationship('Book', secondary='ownership', backref=db.backref('editors', lazy='dynamic'))
+
     def set_password(self, pwd):
         self.password = generate_password_hash(pwd)
 
@@ -40,7 +42,7 @@ class Users(BaseModel, UserMixin):
         return check_password_hash(self.password, pwd)    
 
 class UserSchema(BaseSchema):
-    is_active = fields.Bool(required=False, allow_none=False)
+    is_active = fields.Bool(required=False, allow_none=True)
     is_verified = fields.Bool(required=False, allow_none=False)
     user_type = fields.Str(required=False, allow_none=False)
     username = fields.Str(required=False, allow_none=True, unique=True)
@@ -51,27 +53,51 @@ class UserSchema(BaseSchema):
     gender = fields.Str(required=False, allow_none=True)
     date_of_birth = fields.Date(required=False, allow_none=True)
     photo_profile = fields.Str(required=False, allow_none=True)
-    
-class Books(BaseModel):
-    __tablename__ = 'books'
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
-    root_page_id = db.Column(UUID(as_uuid=True), db.ForeignKey('pages.id'), nullable=False)
+    books = fields.Nested('BookSchema', dump_only=True, many=True)
+
+
+class Book(BaseModel):
+    cover = db.Column(db.String(256), nullable=True, index=False)
     title = db.Column(db.String(120), nullable=True, index=True)
-    status = db.Column(db.String(120), nullable=False, index=False, server_default='draft')
+    status = db.Column(db.String(25), nullable=False, index=False, server_default='draft')
+    description = db.Column(db.String(600), nullable=True, index=True)
+    information = db.Column(JSONB(astext_type=db.Text()), nullable=True, index=True)
+
+    # relations
+    root_path = db.relationship('Path', backref=db.backref('book', lazy=True), uselist=False)
+
 
 class BookSchema(BaseSchema):
-    root_page_id = fields.UUID(required=False, allow_none=True)
-    user_id = fields.UUID(required=False, allow_none=True)
+    root_path_id = fields.UUID(required=False, allow_none=True)
+    cover = fields.Str(required=False, allow_none=True)
     title = fields.Str(required=False, allow_none=True)
     status = fields.Str(required=False, allow_none=True)
+    description = fields.Str(required=False, allow_none=True)
+    information = fields.Dict(required=False, allow_none=True)
 
-class Pages(BaseModel):
-    __tablename__ = 'pages'
+
+class Ownership(BaseModel):
+    is_owner = db.Column(db.Boolean, nullable=False, index=False, default=True, server_default=db.text('true'))
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'), nullable=False, index=True)
+    book_id = db.Column(UUID(as_uuid=True), db.ForeignKey('book.id'), nullable=False, index=True)
+
+
+class Path(BaseModel):
+    book_id = db.Column(UUID(as_uuid=True), db.ForeignKey('book.id'), nullable=True)
+    page = db.Column(UUID(as_uuid=True), db.ForeignKey('page.id'), nullable=True)
+    # childs = db.Column(UUID(as_uuid=True), db.ForeignKey('path.id'), nullable=True)
+
+
+class PathSchema(BaseSchema):
+    page = fields.UUID(required=False, allow_none=True)
+    # childs = fields.UUID(required=False, allow_none=True)
+
+
+class Page(BaseModel):
+    outline = db.Column(db.String(256), nullable=True, index=False)
     text = db.Column(db.Text, nullable=True)
-    page_number = db.Column(db.Integer, nullable=False, index=True)
-    next_links = db.Column(db.ARRAY(db.String(80)))
 
-class PageSchema(BaseSchema):
+
+class Page(BaseSchema):
+    cover = fields.Str(required=False, allow_none=True)
     text = fields.Str(required=True, allow_none=True)
-    page_number = fields.Int(required=True, allow_none=False)
-    next_links = fields.List(fields.Str, required=False, allow_none=True)

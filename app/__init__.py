@@ -56,7 +56,7 @@ def create_app(config_name=None):
         
     @login_manager.user_loader
     def user_loader(user_id):
-        return m.Users.query.get(user_id)
+        return m.User.query.get(user_id)
 
     @login_manager.unauthorized_handler
     def unauthorized():
