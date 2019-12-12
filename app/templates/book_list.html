@@ -8,13 +8,21 @@
                         <img class="card-img-top" src="https://via.placeholder.com/341x341.png?text={{ book.title }}" alt="{{ book.title }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">{{ book.description }}</p>
+                            <p class="card-text">{{ book.description | safe }}</p>
                             <small class="text-muted">{{ book.status }}</small>
                         </div>
                         <div class="card-footer">
-                                <button id="End" type="button" class="btn btn float-right btn-info">Continue</button>
+                            <ul class="nav nav-pills card-header-pills">
+                              <li class="nav-item">
+                                <a class="nav-link" href="/book/Macera-Tuneli/settings/{{ book.id }}"><button id="End" type="button" class="btn btn float-right btn-info">Settings</button></a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link"href="/book/Macera-Tuneli/parts/{{ book.id }}"><button id="End" type="button" class="btn btn float-right btn-info">Continue</button></a>
+                              </li>
+                            </ul>
                         </div>
                     </div>
+                <div class="mt-5"></div>
                 </div>
             {% endfor %}
             <div class="col-md-3">

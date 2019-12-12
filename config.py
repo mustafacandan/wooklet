@@ -7,11 +7,11 @@ class Config(object):
     CONFIG_NAME = 'base'
     # BASE_URL = ''
     HOST = '0.0.0.0'
-    PORT = 8000
+    PORT = 5000
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
     APP_DIR = BASE_DIR + '/app'
-    STATIC_URL_PATH = '/assets'
-    STATIC_FOLDER = APP_DIR + '/assets'
+    STATIC_URL_PATH = ''
+    STATIC_FOLDER = APP_DIR + '/static'
     TEMPLATE_FOLDER = APP_DIR + '/templates'
     TEMPLATES_AUTO_RELOAD = True
     

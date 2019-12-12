@@ -5,14 +5,25 @@
     <div class="warpper" style="width: 800px; margin: auto">
 
         <form id="editorForm" action="./next" method="post" id="identifier">
+
+            <div class="form-group">
+                {{ form.title.label(for="title") }}
+                {{ form.title(class="form-control", for="title", id="title") }}
+            </div>
+            <div class="form-group">
+                {{ form.tags.label(for="tags") }}
+                {{ form.tags(class="form-control", for="tags", id="tags") }}
+            </div>
+                {{ form.description.label(for="desctiption") }}
+
             <div id="editor"></div>
             <textarea name="text" style="display:none" id="hiddenArea"></textarea>
+
         </form>
 
         <div class="mt-5">
-            <button id="End" type="button" class="btn btn-light">End</button>
+            <button id="create" type="button" class="btn btn-light">Create</button>
             <span class="ml-5"></span>
-            <button id="next" type="button" class="btn btn-light">Next</button>
 
         </div>
 
@@ -27,7 +38,7 @@
         ['blockquote', 'code-block'],
 
         [{ 'color': [] }],          // dropdown with defaults from theme
-        
+
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
         [{ 'align': [] }],
@@ -45,21 +56,22 @@
             },
             theme: 'snow'
         });
-        
+
         $(document).ready(function() {
-            $("#next").click(function(){
+            $("#create").click(function(){
                 // $("#hiddenArea").val($("#editor").html());
                 // $.post( "/next", $( "#editorForm" ).serialize() );
 
                 $.ajax({
-                url: 'next',
+                url: '/compose/new',
                 type: 'POST',
-                data: { text: $("#editor").html() },
+                data: { text: quill.container.firstChild.innerHTML, title: $("#title").val(),  tags: $("#tags").val()},
                 success: function(result) {
-                    window.location.href = '/compose';
+                    console.log(result)
+                    window.location.href = '/compose/Macera-Tuneli/edit/'+result.path_id;
                 },
                 });
-            }); 
+            });
 
             $(document).keydown(function(e) {
 
@@ -85,7 +97,7 @@
                 return false;
             }
             return true;
-            }); 
+            });
         });
     </script>
 {% endblock %}
