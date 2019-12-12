@@ -91,11 +91,15 @@ class Path(BaseModel):
     old_parent = db.Column(UUID(as_uuid=True), nullable=True)
 
     # relations
-    parent_id = db.relationship('Path', backref=db.backref('children', lazy=False),
+    parent_id = db.relationship('Path', backref=db.backref('children', lazy=True),
                              uselist=False, remote_side='Path.id')
 
     pages = db.relationship('Page', backref=db.backref('path', lazy=True), uselist=False)
 
+class PathSchemaStop(BaseSchema):
+    class Meta:
+        exclude = ('created_at', 'updated_at', 'parent_id')
+    text = fields.Str(required=False, allow_none=True)
 
 class PathSchema(BaseSchema):
     book_id = fields.UUID(required=False, allow_none=True)
@@ -104,11 +108,17 @@ class PathSchema(BaseSchema):
     children = fields.Nested('PathSchema', dump_only=True, many=True)
 
 
+class PathSchemaChildren(BaseSchema):
+    class Meta:
+        exclude = ('created_at', 'updated_at', 'parent_id')
+    text = fields.Str(required=False, allow_none=True)
+    children = fields.Nested('PathSchemaStop', dump_only=True, many=True)
+
+
 class PathSchemaRoot(BaseSchema):
     class Meta:
         exclude = ('created_at', 'updated_at', 'parent_id')
     text = fields.Str(required=False, allow_none=True)
-    icon = fields.Str(required=False, allow_none=True)
     children = fields.Nested('PathSchemaRoot', dump_only=True, many=True)
 
 

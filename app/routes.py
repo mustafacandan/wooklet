@@ -46,8 +46,8 @@ def upload():
 
 @bp.route('/', methods=['GET'])
 def home():
-    # get all public books from all authors
-    return render_template('home.html'), 200
+    books = BookHandler.get_public_books()
+    return render_template('home.html', books=books), 200
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -113,6 +113,50 @@ def compose_new():
             'book_id': book_id
         }
         return jsonify(res), 200
+
+
+@bp.route('/book/<book_name>/read/<book_id>', defaults={'page_id': None, 'path_id': None})
+@bp.route('/book/<book_name>/c/<page_id>', defaults={'book_id': None, 'path_id': None})
+@bp.route('/book/<book_name>/o/<path_id>', defaults={'book_id': None, 'page_id': None})
+def read_book(book_name, book_id, page_id, path_id):
+    print(book_id, path_id, page_id)
+    pages = []
+    if page_id:
+        pages = BookHandler.get_pages_by_page(page_id)
+        print(1)
+    elif path_id:
+        pages = BookHandler.get_pages_by_path(path_id)
+        print(2)
+    else:
+        pages = BookHandler.get_pages_by_book(book_id)
+        print(3)
+
+
+    # if page id none return first page
+    # iterate over pages
+    # if matches with page_id return +1
+    # if list ends show childrens
+    data = {
+        'book_title': 'Macera Tuneli',
+        'options': None,
+        'page': None
+    }
+    if len(pages) > 0 and page_id is None:
+        data['page'] = pages[0]
+
+    elif len(pages) > 0 and page_id:
+        for i, p in enumerate(pages):
+            if p['id'] == page_id and i <= len(pages) - 2:
+                data['page'] = pages[i+1]
+            elif p['id'] == page_id and i == len(pages) - 1:
+                data['page'] = {
+                    'content': 'Options',
+                    'id': ''
+                }
+                data['options'] = BookHandler.get_children_by_page(page_id)
+
+
+    return render_template('book_read.html', data=data)
 
 
 @bp.route('/book/<book_name>/parts/<book_id>', methods=['GET', 'POST'])

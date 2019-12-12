@@ -10,6 +10,13 @@ class BookHandler:
 
 
     @classmethod
+    def get_children_by_page(cls, page_id):
+        path, err = q.get_children_by_page(page_id)
+        print(path)
+        if not err:
+            return path
+
+    @classmethod
     def add_path(cls, parent_path_id, path_name):
         data, err = q.add_path(parent_path_id, path_name)
         if not err:
@@ -58,6 +65,12 @@ class BookHandler:
         if not user_id:
             raise InvalidUsage('Login needed')
         return q.get_books_by_user(user_id)
+
+    @classmethod
+    def get_public_books(cls):
+        data, err = q.get_public_books()
+        if not err:
+            return data
 
     @classmethod
     def get_paths_by_book_id(cls, book_id):
@@ -129,10 +142,22 @@ class BookHandler:
 
     @classmethod
     def get_pages_by_path(cls, path_id):
-        data, _err =  q.get_pages_by_path(path_id)
+        data, _err = q.get_pages_by_path(path_id)
         if not _err:
             return data
 
+    @classmethod
+    def get_pages_by_page(cls, page_id):
+        data, _err = q.get_pages_by_page(page_id)
+        if not _err:
+            return data
+
+
+    @classmethod
+    def get_pages_by_book(cls, book_id):
+        data, _err = q.get_pages_by_book(book_id)
+        if not _err:
+            return data
 class UserHandler:
     @classmethod
     def create_user(cls, form):

@@ -81,6 +81,12 @@ def get_books_by_user(user_id):
     if not err:
         return data
 
+
+def get_public_books():
+    books = m.Book.query.filter(m.Book.is_deleted.is_(False)).filter(m.Book.status == 'public').all()
+    data = m.BookSchema().dump(books, many=True)
+    return data
+
 # PATH FUNCTIONS
 def get_paths_by_book_id(book_id):
     paths = m.Path.query.filter(m.Path.book_id == book_id).filter(m.Path.parent.is_(None))
@@ -113,6 +119,13 @@ def create_path(book_id, path_raw={}):
         m.db.session.add(path)
         m.db.session.commit()
         return path
+
+
+def get_children_by_page(page_id):
+    path = m.Path.query.filter(m.Path.id == m.Page.query.get(page_id).path_id) \
+        .first()
+    return m.PathSchemaChildren().dump(path)
+
 
 def get_tree(book_id):
     path = m.Path.query.filter(m.Book.id == book_id) \
@@ -191,6 +204,21 @@ def get_page_by_id(page_id):
     page = m.Page.query.get(page_id)
     return m.PageSchema().dump(page)
 
+
 def get_pages_by_path(path_id):
     pages = m.Page.query.filter_by(path_id=path_id).order_by(m.Page.created_at.asc()).all()
+    return m.PageSchema().dump(pages, many=True)
+
+
+def get_pages_by_page(page_id):
+    pages = m.Page.query.filter_by(path_id=m.Page.query.get(page_id).path_id).order_by(m.Page.created_at.asc()).all()
+    return m.PageSchema().dump(pages, many=True)
+
+
+def get_pages_by_book(book_id):
+    root_path = m.Path.query.filter(m.Path.book_id == book_id).filter(m.Path.parent.is_(None)).filter(
+        m.Path.old_parent.is_(None)).first().id
+    # m.Path.query.filter(m.Path.parent.is_(None)).filter(m.Path.old_parent.is_(None)).first().id
+    pages = m.Page.query.filter_by(path_id=root_path).order_by(m.Page.created_at.asc()).all()
+    print(pages)
     return m.PageSchema().dump(pages, many=True)

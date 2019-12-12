@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="m-5 row">
+        <div class="card-deck">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <div class="" style="min-height: 600px;">
+                        <h5 class="">{{ data.book_title }}</h5>
+                        {% if data.options %}
+                            {% for option in data.options.children %}
+                                <ul class="nav nav-pills card-header-pills">
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="/book/Macera-Tuneli/o/{{ option.id }}"><button id="Next" type="button" class="btn btn float-right btn-info">{{ option.text }}</button></a>
+                                  </li>
+                                </ul>
+                            {% endfor %}
+                        {% elif data.page %}
+                            <p class="">{{ data.page.content | safe }}</p>
+                            <ul class="nav nav-pills card-header-pills">
+                              <li class="nav-item">
+                                <a class="nav-link" href="/book/Macera-Tuneli/c/{{ data.page.id }}"><button id="Next" type="button" class="btn btn float-right btn-info">Next</button></a>
+                              </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                </div>
+
+        </div>
+    </div>
+{% endblock %}
