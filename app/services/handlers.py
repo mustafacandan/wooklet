@@ -113,6 +113,13 @@ class BookHandler:
             return data
 
     @classmethod
+    def end_path(cls, id):
+        data, _err = q.end_path(id)
+        if not _err:
+            print(_err)
+            return data
+
+    @classmethod
     def get_page_by_id(cls, page_id):
         data, _err = q.get_page_by_id(page_id)
         if not _err:

@@ -73,6 +73,27 @@ $(document).ready(function() {
                             "action": function (obj) {
                                 tree.delete_node($node);
                             }
+                        },
+                        "End": {
+                            "separator_before": true,
+                            "separator_after": false,
+                            "label": "End",
+                            "icon":"fas fa-check",
+                            "action": function (data) {
+                                var inst = $.jstree.reference(data.reference),
+                                obj = inst.get_node(data.reference);
+
+                                $.ajax({
+                                    url: '/path/end/'+obj.id,
+                                    type: 'POST',
+                                    data: {
+                                        name: 'null'
+                                    },
+                                    success: function(result) {
+                                        $('#treeview').jstree(true).refresh();
+                                    },
+                                });
+                            }
                         }
                     };
                 }

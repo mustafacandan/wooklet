@@ -147,6 +147,12 @@ def rename_path(id, name):
     m.db.session.commit()
     return m.PathSchemaRoot().dump(path)
 
+def end_path(id):
+    path = m.Path.query.get(id)
+    path.icon = 'fas fa-file'
+    m.db.session.commit()
+    return m.PathSchemaRoot().dump(path)
+
 
 # PAGE FUNCTIONS
 def create_page(path_id, page_raw):
