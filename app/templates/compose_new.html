@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="mt-5">
+    </div>
+    <div class="warpper" style="width: 800px; margin: auto">
+
+        <form id="editorForm" action="./next" method="post" id="identifier">
+
+            <div class="form-group">
+                {{ form.title.label(for="title") }}
+                {{ form.title(class="form-control", for="title", id="title") }}
+            </div>
+            <div class="form-group">
+                {{ form.tags.label(for="tags") }}
+                {{ form.tags(class="form-control", for="tags", id="tags") }}
+            </div>
+                {{ form.description.label(for="desctiption") }}
+
+            <div id="editor"></div>
+            <textarea name="text" style="display:none" id="hiddenArea"></textarea>
+
+        </form>
+
+        <div class="mt-5">
+            <button id="create" type="button" class="btn btn-light">Create</button>
+            <span class="ml-5"></span>
+
+        </div>
+
+    </div>
+    <!-- Include the Quill library -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Initialize Quill editor -->
+    <script>
+        var toolbarOptions = [
+        ['bold', 'italic', 'underline'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ 'color': [] }],          // dropdown with defaults from theme
+
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+        [{ 'align': [] }],
+
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'font': [] }],
+        [ 'image'],
+        ['clean']                                         // remove formatting button
+        ];
+
+        var quill = new Quill('#editor', {
+        modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow'
+        });
+
+        $(document).ready(function() {
+            $("#create").click(function(){
+                // $("#hiddenArea").val($("#editor").html());
+                // $.post( "/next", $( "#editorForm" ).serialize() );
+
+                $.ajax({
+                url: '/compose/new',
+                type: 'POST',
+                data: { text: quill.container.firstChild.innerHTML, title: $("#title").val(),  tags: $("#tags").val()},
+                success: function(result) {
+                    console.log(result)
+                    window.location.href = '/compose/Macera-Tuneli/edit/'+result.path_id;
+                },
+                });
+            });
+
+            $(document).keydown(function(e) {
+
+            var key = undefined;
+            var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+
+            while (key === undefined && possible.length > 0)
+            {
+                key = possible.pop();
+            }
+
+            if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey))
+            {
+                e.preventDefault();
+                $.ajax({
+                url: 'next',
+                type: 'POST',
+                data: { text: $("#editor").html() },
+                success: function(result) {
+                    alert("Saved");
+                },
+                });
+                return false;
+            }
+            return true;
+            });
+        });
+    </script>
+{% endblock %}

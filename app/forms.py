@@ -6,7 +6,8 @@ from wtforms.widgets import PasswordInput
 
 class compose_form(FlaskForm):
     title = StringField('Title')
-    text = TextAreaField('Description', [Length(max=3000)])
+    tags = StringField('Tags')
+    description = TextAreaField('Description', [Length(max=3000)])
     submit = SubmitField('Save')
 
 class compose_page_form(FlaskForm):
