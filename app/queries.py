@@ -74,7 +74,9 @@ def get_book_by_page_id(page_id):
         return data
 
 def get_books_by_user(user_id):
-    books = m.User.query.get(user_id).books.query.filter(m.Book.is_deleted.is_(False))
+    books = m.User.query.get(user_id).books
+    if books:
+        books.query.filter(m.Book.is_deleted.is_(False))
     data, err = m.BookSchema().dump(books, many=True)
     if not err:
         return data
