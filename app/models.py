@@ -33,7 +33,7 @@ class User(BaseModel, UserMixin):
     photo_profile = db.Column(db.String(250), nullable=True, index=False)
 
     # relations
-    books = db.relationship('Book', secondary='ownership', uselist=False, backref=db.backref('editors', lazy='dynamic'))
+    books = db.relationship('Book', secondary='ownership', uselist=True, backref=db.backref('editors', lazy='dynamic'))
 
     def set_password(self, pwd):
         self.password = generate_password_hash(pwd)
