@@ -68,7 +68,7 @@
                 data: { text: quill.container.firstChild.innerHTML, title: $("#title").val(),  tags: $("#tags").val()},
                 success: function(result) {
                     console.log(result)
-                    window.location.href = '/compose/Macera-Tuneli/edit/'+result.path_id;
+                    window.location.href = '/book/Macera-Tuneli/parts/'+result.book_id;
                 },
                 });
             });
