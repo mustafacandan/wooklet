@@ -267,6 +267,11 @@ def rename_path(path_id):
     path = BookHandler.rename_path(path_id, request)
     return jsonify('success'), 200
 
+@bp.route('/path/end/<path_id>', methods=['POST'])
+@login_required
+def end_path(path_id):
+    path = BookHandler.end_path(path_id)
+    return jsonify('success'), 200
 
 @bp.route('/path/delete/<path_id>', methods=['POST'])
 @login_required
