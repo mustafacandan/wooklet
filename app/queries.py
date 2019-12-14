@@ -52,8 +52,14 @@ def create_book(book_raw, user_id):
     return book
 
 
+def get_book_by_id(book_id):
+    book = m.Book.query.get(book_id)
+    data, err = m.BookSchema().dump(book)
+    if not err:
+        print(err)
+        return data
+
 def get_book_by_path_id(path_id):
-    print(path_id, end=" path id \n")
     path = m.Path.query.get(path_id)
 
     print(path.book_id, end=" book id \n")

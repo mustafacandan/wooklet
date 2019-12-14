@@ -89,6 +89,15 @@ def signup():
     raise Unauthorized()
 
 
+@bp.route('/book/<book_name>/detail/<book_id>')
+def book_landing(book_name, book_id):
+    data = {
+        'book': BookHandler.get_book(None, None, book_id)
+    }
+
+    return render_template('book-landing.html', **data)
+
+
 @bp.route('/books', methods=['GET', 'POST'])
 @login_required
 def book_list():
