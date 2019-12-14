@@ -102,7 +102,7 @@
 {#                    <p class="card-vote align-bottom text-blu"><b>572</b> Votes</p>#}
                     <p class="card-vote align-bottom text-blu">{{ book.description[:200] | safe }}</p>
                   </div>
-                  <a href="/book/{{ book.title | replace(' ', '-')}}/read/{{ book.id }}" class="btn btn-start w-100" style="margin-bottom:0px">START</a>
+                  <a href="/book/{{ book.title | replace(' ', '-')}}/detail/{{ book.id }}" class="btn btn-start w-100" style="margin-bottom:0px">START</a>
                 </div>
               </div>
           {% endfor %}
