@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, redirect, render_template, send_from_directory, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from app.services.handlers import UserHandler, BookHandler
-from werkzeug.exceptions import InternalServerError, NotFound
+from werkzeug.exceptions import InternalServerError, Unauthorized, NotFound
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -47,8 +47,11 @@ def upload():
 
 @bp.route('/', methods=['GET'])
 def home():
-    books = BookHandler.get_public_books()
-    return render_template('home.html', books=books), 200
+    data = {
+        'popular_books': BookHandler.get_public_books()[:3]
+    }
+    print(data['popular_books'])
+    return render_template('index.html', **data), 200
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -57,10 +60,11 @@ def login():
     if request.method == 'GET':
         return render_template('login.html', form=form)
     else:
+        err = None
         if form.validate_on_submit():
             user, err = UserHandler.check_user_information(form)
         if err:
-            return 'incorrect information login', 400
+            raise InternalServerError()
         else:
             login_user(user, remember=True, force=True)
             return redirect(url_for('base.home'))
@@ -82,7 +86,7 @@ def signup():
             user = UserHandler.create_user(form)
             login_user(user, remember=True, force=True)
             return redirect(url_for('base.home'))
-    return 'incorrect information signup', 400
+    raise Unauthorized()
 
 
 @bp.route('/books', methods=['GET', 'POST'])

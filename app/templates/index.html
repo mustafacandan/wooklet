@@ -1,0 +1,149 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Endless End</title>
+  <!-- Favicon -->
+
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <script src="/js/fas-all.min.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito:300,500,700,800&display=swap&subset=latin-ext"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style/bootstrap.min.css" />
+  <link rel="stylesheet" href="/style/styles.css" />
+  <link rel="stylesheet" href="/style/style_overwrites.css" />
+  <link rel="stylesheet" href="/style/animate.min.css" />
+  <link rel="stylesheet" href="/style/fas-all.min.css" />
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light px-lg-5 py-3">
+    <a class="navbar-brand" href="#">
+      <!--<img src="../resimler/logo.png" class="navbar-brand-logo"> -->Endless End
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <ul class="nav navbar-nav ml-auto w-100 justify-content-center">
+        <li class="nav-item active">
+          <a class="nav-link" href="#"><i class="fas fa-home "></i> Home</a>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="/books" id="navbarDropdownMenuLink" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-share-alt"></i> Books
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/books.html?sort=popular">Popular Books</a>
+            <a class="dropdown-item" href="/books.html?sort=vote">Most Voted Books</a>
+
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/my-books"><i class="fas fa-pen-fancy"></i> Compose</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/faq"><i class="fas fa-question"></i> FAQ</a>
+        </li>
+
+      </ul>
+
+    </div>
+    <a href="sign-up.html"><button type="button" class="btn btn-primary"><i class="fas fa-edit"></i> Become a
+        Wooker!</button></a>
+  </nav>
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row p-7">
+        <div class="col-md-6">
+          <h1 class="text-blu" id="karsilama">Meet With Endless End.</h1>
+          <p class="text-blu karsilama-metni">Choose or Compose Your Own Adventure,</br>
+            then just share…</p>
+          <p class="karsilama-metni">In the Endless End World, you can experience
+            the adventures of others or you can you can
+            add your own adventure to the world of <b>Endless End.</b> </p>
+
+          <button type="button" class="btn btn-primary mt-5"><i class="fas fa-share-alt "></i> Discover Endless
+            End</button>
+        </div>
+        <div class="col-md-6"><img class="w-100 img-responsive" src="assets/karsilama%20gorsel.png"></div>
+      </div>
+    </div>
+    <div class="container-fluid bg-light">
+      <div class="container p-7">
+        <div class="row">
+          <div class="col-12 text-center ">
+            <h2>Most Voted <span class="text-blu">Endless Ends</span></h2>
+            <p class="p-3 pb-5 ">Most voted endless ends by adventurers</p>
+          </div>
+
+          {% for book in popular_books %}
+            <div class="col-md-4">
+                <div class="card w-90 crop">
+                    <div>
+                        <img src="/assets/story-1.png" class="card-img-top">
+                    </div>
+                  <div class="card-body">
+                    <h5 class="card-title align-top">{{ book.title }}</h5>
+                    <p class="card-text"><i class="fas fa-user"></i>
+                        {{ book.editors[0].username  }}
+                        <i class="far fa-clock"></i> {{ book.created_at }}
+                    </p>
+{#                    <p class="card-vote align-bottom text-blu"><b>572</b> Votes</p>#}
+                    <p class="card-vote align-bottom text-blu">{{ book.description[:200] | safe }}</p>
+                  </div>
+                  <a href="/book/{{ book.title | replace(' ', '-')}}/read/{{ book.id }}" class="btn btn-start w-100" style="margin-bottom:0px">START</a>
+                </div>
+              </div>
+          {% endfor %}
+
+
+          <div class="col-12">
+            <div style="text-align: center"><a href="#" class="btn btn-outline-primary my-5">See More ></a></div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+      <footer>
+        <div class="container-fluid bg-gri pt-4 pb-2">
+          <div class="container">
+            <div class="row">
+
+              <div class="col-md-3 text-left text-white">© 2019 Endless End</div>
+
+              <div class="col-md-9 text-right">
+                <ul class="list-inline">
+                  <li class="list-inline-item "><a href="#">Contact / Send Feedback</a></li>
+                  <li class="list-inline-item"><a href="#">About Endless End</a></li>
+                  <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                  <li class="list-inline-item"><a href="#">Terms of Services</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </footer>
+</body>
+
+
+
+
+
+</html>

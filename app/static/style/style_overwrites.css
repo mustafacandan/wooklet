@@ -1,0 +1,12 @@
+.crop{
+  overflow: hidden;
+}
+
+.card-img-top {
+  width: unset;
+  border-radius: 15px 15px 0px 1px;
+}
+
+.card-body {
+  height: 200px;
+}
