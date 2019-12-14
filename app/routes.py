@@ -10,7 +10,7 @@ from wtforms.validators import DataRequired
 from flask_ckeditor import CKEditor, CKEditorField, upload_fail, upload_success
 
 from flask import current_app
-from app.forms import compose_form, signup_form, login_form, compose_page_form
+from app.forms import ComposeForm, SignupForm, LoginForm, ComposePageForm
 bp = Blueprint('base', __name__)
 
 
@@ -52,7 +52,7 @@ def home():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    form = login_form()
+    form = LoginForm()
     if request.method == 'GET':
         return render_template('login.html', form=form)
     else:
@@ -73,7 +73,7 @@ def logout():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = signup_form()
+    form = SignupForm()
     if request.method == 'GET':
         return render_template('signup.html', form=form)
     else:
@@ -102,7 +102,7 @@ def book_list():
 @bp.route('/compose/new', methods=['GET', 'POST'])
 @login_required
 def compose_new():
-    form = compose_form()
+    form = ComposeForm()
     if request.method == 'GET':
         return render_template('compose_new.html', form=form)
     else:
@@ -162,7 +162,7 @@ def read_book(book_name, book_id, page_id, path_id):
 @bp.route('/book/<book_name>/parts/<book_id>', methods=['GET', 'POST'])
 @login_required
 def compose_edit(book_name, book_id):
-    form = compose_form()
+    form = ComposeForm()
     if request.method == 'GET':
         # get paths with book id
         paths = BookHandler.get_paths_by_book_id(book_id)
@@ -181,7 +181,7 @@ def book_settings(book_id, book_name):
 @bp.route('/book/<book_name>/pages/<path_id>', methods=['GET'], defaults={'page_id': 'new'})
 @login_required
 def list_pages_(page_id, path_id, book_name):
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
     pages = BookHandler.get_pages_by_path(path_id)
@@ -199,7 +199,7 @@ def list_pages_(page_id, path_id, book_name):
 @login_required
 def book_part(page_id, path_id, book_name):
     print(path_id, end=' ###\n')
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
     page = ""
@@ -223,7 +223,7 @@ def book_part(page_id, path_id, book_name):
 @login_required
 def compose_n(page_id, path_id, book_name):
     print(path_id, end=' ###\n')
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
     page = ""
@@ -242,7 +242,7 @@ def compose_n(page_id, path_id, book_name):
 @bp.route('/compose/<page_id>', methods=['GET', 'POST'])
 @login_required
 def compose(page_id):
-    form = compose_page_form()
+    form = ComposePageForm()
     if request.method == 'GET':
         data = {
             'page_id': page_id,
