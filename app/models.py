@@ -6,6 +6,7 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
+
 class BaseModel(db.Model):
     __abstract__ = True
     id = db.Column(UUID(as_uuid=True), primary_key=True, server_default=db.text('gen_random_uuid()'))
@@ -33,7 +34,7 @@ class User(BaseModel, UserMixin):
     photo_profile = db.Column(db.String(250), nullable=True, index=False)
 
     # relations
-    books = db.relationship('Book', secondary='ownership', uselist=True, backref=db.backref('editors', lazy='dynamic'))
+    books = db.relationship('Book', secondary='ownership', backref=db.backref('book_editors', lazy=True))
 
     def set_password(self, pwd):
         self.password = generate_password_hash(pwd)
@@ -55,6 +56,18 @@ class UserSchema(BaseSchema):
     photo_profile = fields.Str(required=False, allow_none=True)
     books = fields.Nested('BookSchema', dump_only=True, many=True)
 
+class EditorSchema(BaseSchema):
+    is_active = fields.Bool(required=False, allow_none=True)
+    is_verified = fields.Bool(required=False, allow_none=False)
+    user_type = fields.Str(required=False, allow_none=False)
+    username = fields.Str(required=False, allow_none=True, unique=True)
+    email = fields.Str(required=False, allow_none=True)
+    password = fields.Str(required=True, allow_none=False, load_only=True)
+    full_name = fields.Str(required=False, allow_none=False)
+    gsm = fields.Str(required=False, allow_none=True)
+    gender = fields.Str(required=False, allow_none=True)
+    date_of_birth = fields.Date(required=False, allow_none=True)
+    photo_profile = fields.Str(required=False, allow_none=True)
 
 class Book(BaseModel):
     cover = db.Column(db.String(256), nullable=True, index=False)
@@ -64,7 +77,8 @@ class Book(BaseModel):
     information = db.Column(JSONB(astext_type=db.Text()), nullable=True, index=True)
 
     # relations
-    root_path = db.relationship('Path', backref=db.backref('book', lazy=True), uselist=False)
+    root_path = db.relationship('Path', backref=db.backref('root_path_book', lazy=True), uselist=False)
+    editors = db.relationship('User', secondary='ownership', backref=db.backref('editor_books', lazy=True))
 
 
 class BookSchema(BaseSchema):
@@ -74,7 +88,8 @@ class BookSchema(BaseSchema):
     status = fields.Str(required=False, allow_none=True)
     description = fields.Str(required=False, allow_none=True)
     information = fields.Dict(required=False, allow_none=True)
-
+    editors = fields.Nested('EditorSchema', dump_only=True, many=True)
+    created_at = fields.DateTime('%Y-%m-%d')
 
 class Ownership(BaseModel):
     is_owner = db.Column(db.Boolean, nullable=False, index=False, default=True, server_default=db.text('true'))
@@ -95,6 +110,7 @@ class Path(BaseModel):
                              uselist=False, remote_side='Path.id')
 
     pages = db.relationship('Page', backref=db.backref('path', lazy=True), uselist=False)
+
 
 class PathSchemaStop(BaseSchema):
     class Meta:
