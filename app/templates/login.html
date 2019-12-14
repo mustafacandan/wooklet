@@ -1,26 +1,137 @@
-{% extends "base.html" %}
-{% block body %}
-	<div class="warpper" style="width: 700px; margin: auto">
-		<h1>Login</h1>
-		<form method="post">
-            {{ form.csrf_token }}
+<html>
 
-            <form class="dropdown-menu p-4">
-                <div class="form-group">
-                    {{ form.username_or_email.label(for="email") }}
-                    {{ form.username_or_email(class="form-control", for="email") }}
-                </div>
-                <div class="form-group">
-                    {{ form.password.label(for="password") }}
-                    {{ form.password(class="form-control", for="password") }}
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Endless End</title>
+  <!-- Favicon -->
+
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <script src="/js/fas-all.min.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito:300,500,700,800&display=swap&subset=latin-ext"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style/bootstrap.min.css" />
+  <link rel="stylesheet" href="/style/styles.css" />
+  <link rel="stylesheet" href="/style/animate.min.css" />
+  <link rel="stylesheet" href="/style/fas-all.min.css" />
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light px-lg-5 py-3 ">
+    <a class="navbar-brand" href="#">
+      <!--<img src="../resimler/logo.png" class="navbar-brand-logo"> -->Endless End
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <ul class="nav navbar-nav  w-100 justify-content-end">
+        <li class="nav-item active">
+          <a class="nav-link" href="#"><i class="fas fa-home "></i> Home</a>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-share-alt"></i> Books
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/books.html?sort=popular">Popular Books</a>
+            <a class="dropdown-item" href="/books.html?sort=vote">Most Voted Books</a>
+
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/my-books"><i class="fas fa-pen-fancy"></i> Compose</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/faq"><i class="fas fa-question"></i> FAQ</a>
+        </li>
+
+      </ul>
+
+    </div>
+
+  </nav>
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row p-7 mb-7">
+        <div class="col-md-6 text-right pr-5">
+          <h1 class="text-blu karsilama-2">Welcome to the </br>
+            endless world of </br>
+            endless end.</h1>
+          </br>
+          <p>Don’t you already have an account?</br>
+            Just <a href="/sign-up.html">Sign Up! </a></p>
+
+        </div>
+
+
+              <div class="col-md-6 ">
+          <div class="ml-5 w-90 p-5 account-block">
+            <h2 class="account-block-header">Sign In To <span class="text-blu">Endless End</span></h2>
+
+
+
+
+              <form method="post">
+                  {{ form.csrf_token }}
+                  <div class="form-group">
+                    <label class="input-labeli" for="email"><i class="fas fa-envelope"></i>
+                      Username or E-mail address</label>
+                      {{ form.username_or_email(id="email", class="form-control", **{'aria-describedby':"emailHelp", 'placeholder':"Enter username or email address"}) }}
+                  </div>
+                  <div class="form-group ">
+                    <label class="input-labeli" for="password"><i class="fas fa-key"></i> Password</label>
+                    <div class="input-group">
+                        {{ form.password(id="password", class="form-control mr-1",  **{'placeholder':"Password", 'type':"password"}) }}
                     </div>
-                {{ form.submit(class="btn btn-light") }}
-            </form>
-            <br>
-        </form>
-        {{ ckeditor.load() }}
-        {{ ckeditor.config(name='body') }}
-        <hr>
-        Are you new here? <a href="/signup"><button type="button" class="btn btn-light">Sign up now!</button></a>
-	</div>
-{% endblock %}
+                  </div>
+            <a href="profile.html">
+                {{ form.submit(class="btn btn-sm btn-primary w-100") }}
+            </a>
+              </form>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+    <footer>
+      <div class="container-fluid bg-gri pt-4 pb-2 mt-5">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-md-3 text-left text-white">© 2019 Endless End</div>
+
+            <div class="col-md-9 text-right">
+              <ul class="list-inline">
+                <li class="list-inline-item "><a href="#">Contact / Send Feedback</a></li>
+                <li class="list-inline-item"><a href="#">About Endless End</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                <li class="list-inline-item"><a href="#">Terms of Services</a></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </footer>
+</body>
+
+
+
+
+
+</html>
