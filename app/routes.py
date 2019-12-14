@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, request, redirect, render_template, send_from_directory, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from app.services.handlers import UserHandler, BookHandler
+from werkzeug.exceptions import InternalServerError, NotFound
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -82,11 +83,6 @@ def signup():
             login_user(user, remember=True, force=True)
             return redirect(url_for('base.home'))
     return 'incorrect information signup', 400
-
-
-@bp.route('/unauthorized', methods=['GET', 'POST'])
-def unauthorized():
-    return redirect(url_for('base.login'))
 
 
 @bp.route('/books', methods=['GET', 'POST'])
@@ -337,3 +333,36 @@ def next():
     # text = request.form.get('text')
     # saves the page and returns the next 
     return "", 200
+
+
+@bp.route('/unauthorized', methods=['GET'])
+def unauthorized():
+    data = {
+        'title': 'Need Permission',
+        'message': 'Apparently you don\'t have permission for this page'
+    }
+    return render_template('error.html', **data), 500
+
+
+@bp.route('/400',)
+def url_for_404():
+    raise NotFound()
+
+
+@bp.route('/500',)
+def url_for_500():
+    raise InternalServerError()
+
+
+@bp.app_errorhandler(404)
+def handle_404(err):
+    return render_template('404.html'), 404
+
+
+@bp.app_errorhandler(500)
+def handle_500(err):
+    data = {
+        'title': 'Something went wrong',
+        'message': '(But don\'t worry we will take care of it.)'
+    }
+    return render_template('error.html', **data), 500
