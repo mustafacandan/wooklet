@@ -12,6 +12,7 @@
   <script src="/js/scripts.js"></script>
   <script src="/js/fas-all.min.js"></script>
 
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
   <link href="https://fonts.googleapis.com/css?family=Nunito:300,500,700,800&display=swap&subset=latin-ext"
     rel="stylesheet">
@@ -57,13 +58,13 @@
       </ul>
 
     </div>
-      {% if general.user_info is not none %}
+      {% if user_info is not none %}
 
             <div class="dropdown">
               <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img class="navbar-avatar" src="https://i.hizliresim.com/0031A8.png">
-                {{  general.user_info }} </button>
+                {{  user_info }} </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="/profile.html">My Profile</a>
                 <a class="dropdown-item" href="/my-library.html">My Library</a>

@@ -17,13 +17,11 @@ bp = Blueprint('base', __name__)
 
 @bp.context_processor
 def context_processor():
-    user_info = None
-    if current_user.get_id():
-        user_info = current_user.username
-    general = {
-        'user_info' : user_info
+    user_info = current_user if current_user.username else None
+    data = {
+        'user_info': user_info
     }
-    return dict(general=general)
+    return dict(**data)
 
 
 @bp.route('/files/<filename>')
@@ -109,7 +107,6 @@ def compose_new():
         }
         return render_template('compose_new.html', form=form, **data)
     else:
-        print('whoaa')
         # creates a book
         book = BookHandler.create_book(request)
         res = {
@@ -119,7 +116,7 @@ def compose_new():
         return jsonify(res), 200
 
 
-@bp.route('/books', methods=['GET', 'POST'])
+@bp.route('/my-books', methods=['GET', 'POST'])
 @login_required
 def book_list():
     if request.method == 'GET':
@@ -375,12 +372,18 @@ def url_for_500():
 
 @bp.app_errorhandler(404)
 def handle_404(err):
-    return render_template('404.html'), 404
+    user_info = current_user if current_user.username else None
+    data = {
+        'user_info': user_info
+    }
+    return render_template('404.html', **data), 404
 
 
 @bp.app_errorhandler(500)
 def handle_500(err):
+    user_info = current_user if current_user.username else None
     data = {
+        'user_info': user_info,
         'title': 'Something went wrong',
         'message': '(But don\'t worry we will take care of it.)'
     }
