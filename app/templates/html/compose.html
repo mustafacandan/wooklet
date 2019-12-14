@@ -1,0 +1,256 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Endless End</title>
+  <!-- Favicon -->
+
+  <script src="js/jquery-3.3.1.slim.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/fas-all.min.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito:300,500,700,800&display=swap&subset=latin-ext"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style/bootstrap.min.css" />
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" href="style/styles.css" />
+  <link rel="stylesheet" href="style/animate.min.css" />
+  <link rel="stylesheet" href="style/fas-all.min.css" />
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light px-lg-5 py-3">
+    <a class="navbar-brand" href="#">
+      <!--<img src="../resimler/logo.png" class="navbar-brand-logo"> -->Endless End
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <ul class="nav navbar-nav ml-auto w-100 justify-content-center">
+        <li class="nav-item active">
+          <a class="nav-link" href="/"><i class="fas fa-home "></i> Home</a>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="/books" id="navbarDropdownMenuLink" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-share-alt"></i> Books
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/books.html?sort=popular">Popular Books</a>
+            <a class="dropdown-item" href="/books.html?sort=vote">Most Voted Books</a>
+
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/my-books"><i class="fas fa-pen-fancy"></i> Compose</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/faq"><i class="fas fa-question"></i> FAQ</a>
+        </li>
+
+      </ul>
+
+    </div>
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="navbar-avatar" src="https://i.hizliresim.com/0031A8.png">
+        NAME </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/profile.html">My Profile</a>
+        <a class="dropdown-item" href="/my-library.html">My Library</a>
+        <a class="dropdown-item" href="/my-books.html">My Desk</a>
+        <a class="dropdown-item" href="/edit-profile.html">Edit Profile</a>
+        <a class="dropdown-item text-danger" href="/log-out">Log out</a>
+      </div>
+    </div>
+
+  </nav>
+
+  <div class="container-fluid bg-light pb-5">
+    <div class="container py-5 h-100">
+      <div class="row">
+
+        <div class="col-md-9">
+          <h1 class="text-blu disp-inl">Compose</h1><a href="#"></a><button class="btn btn-primary mb-4 ml-2">EDIT
+            PAGES ></button></a>
+          <div class="mt-5">
+          </div>
+          <div class="warpper" style="width: 800px; margin: auto">
+
+            <form id="editorForm" action="./next" method="post" id="identifier">
+
+              <div class="form-group">
+                <label class="input-labeli" for="title">
+                  Title</label>
+                <input type="text" class="form-control" id="title" for="title" placeholder="Title">
+              </div>
+              <div class="form-group">
+                <label class="input-labeli" for="tags">
+                  Tags</label>
+                <input type="text" class="form-control" id="tags" for="tags" placeholder="Tags">
+              </div>
+
+
+              <label class="input-labeli" for="description">
+                Description</label>
+              <div id="editor"></div>
+
+            </form>
+
+
+
+          </div>
+
+        </div>
+
+        <div class="col-md-3 mt-5">
+          <h2>Options</h2>
+          <h3 style="font-weight: 300;" class="disp-inl">Cover Image</h3> <a href="#">CHANGE ></a></br>
+          <div class="w-100 bg-dark mt-3" style="height: 150px;"><img src="assets/story-1.png" class="h-100 w-100">
+          </div>
+          </br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <label class="form-check-label" for="inlineRadio1">Published</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <label class="form-check-label" for="inlineRadio2">Draft</label>
+          </div>
+          </br>
+          <div class="form-group">
+
+            <select id="inputState" class="form-control mt-2">
+              <option selected>Choose...</option>
+              <option>Published</option>
+              <option>Draft</option>
+            </select>
+
+            <a href="#"><button class="btn btn-outline-primary w-49 mt-3">SAVE <i class="far fa-save"></i></button></a>
+            <a href="#"></a><button class="btn btn-outline-danger w-49 mt-3">DELETE X</button></a>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+  <footer>
+    <div class="container-fluid bg-gri pt-4 pb-2">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-3 text-left text-white">© 2019 Endless End</div>
+
+          <div class="col-md-9 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item "><a href="#">Contact / Send Feedback</a></li>
+              <li class="list-inline-item"><a href="#">About Endless End</a></li>
+              <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+              <li class="list-inline-item"><a href="#">Terms of Services</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+</body>
+
+<!-- Include the Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+  var toolbarOptions = [
+    ['bold', 'italic', 'underline'], // toggled buttons
+    ['blockquote', 'code-block'],
+    [{
+      'color': []
+    }], // dropdown with defaults from theme
+    [{
+      'list': 'ordered'
+    }, {
+      'list': 'bullet'
+    }],
+    [{
+      'indent': '-1'
+    }, {
+      'indent': '+1'
+    }], // outdent/indent
+    [{
+      'align': []
+    }],
+    [{
+      'header': [1, 2, 3, 4, 5, 6, false]
+    }],
+    [{
+      'font': []
+    }],
+    ['image'],
+    ['clean'] // remove formatting button
+  ];
+  var quill = new Quill('#editor', {
+    modules: {
+      toolbar: toolbarOptions
+    },
+    theme: 'snow'
+  });
+  $(document).ready(function () {
+    $("#create").click(function () {
+      // $("#hiddenArea").val($("#editor").html());
+      // $.post( "/next", $( "#editorForm" ).serialize() );
+      $.ajax({
+        url: '/compose/new',
+        type: 'POST',
+        data: {
+          text: quill.container.firstChild.innerHTML,
+          title: $("#title").val(),
+          tags: $("#tags").val()
+        },
+        success: function (result) {
+          console.log(result)
+          window.location.href = '/book/Macera-Tuneli/parts/' + result.book_id;
+        },
+      });
+    });
+    $(document).keydown(function (e) {
+      var key = undefined;
+      var possible = [e.key, e.keyIdentifier, e.keyCode, e.which];
+      while (key === undefined && possible.length > 0) {
+        key = possible.pop();
+      }
+      if (key && (key == '115' || key == '83') && (e.ctrlKey || e.metaKey) && !(e.altKey)) {
+        e.preventDefault();
+        $.ajax({
+          url: 'next',
+          type: 'POST',
+          data: {
+            text: $("#editor").html()
+          },
+          success: function (result) {
+            alert("Saved");
+          },
+        });
+        return false;
+      }
+      return true;
+    });
+  });
+</script>
+
+
+
+</html>
