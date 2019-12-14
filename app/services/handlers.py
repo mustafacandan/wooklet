@@ -47,7 +47,7 @@ class BookHandler:
         if not path:
             raise InvalidUsage('path error')
 
-        return book.id
+        return book
 
     @classmethod
     def get_book(cls, path_id=None, page_id=None, id=None):

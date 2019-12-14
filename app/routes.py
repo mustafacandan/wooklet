@@ -94,8 +94,29 @@ def book_landing(book_name, book_id):
     data = {
         'book': BookHandler.get_book(None, None, book_id)
     }
-
     return render_template('book-landing.html', **data)
+
+
+@bp.route('/compose/new', methods=['GET', 'POST'])
+@login_required
+def compose_new():
+    form = ComposeForm()
+    if request.method == 'GET':
+        data = {
+            'book_id': None,
+            'path_id': None,
+            'page_id': None
+        }
+        return render_template('compose_new.html', form=form, **data)
+    else:
+        print('whoaa')
+        # creates a book
+        book = BookHandler.create_book(request)
+        res = {
+            'book_id': book.id,
+            'book_title': book.title
+        }
+        return jsonify(res), 200
 
 
 @bp.route('/books', methods=['GET', 'POST'])
@@ -106,22 +127,6 @@ def book_list():
         return render_template('book_list.html', books=books)
 
 # TODO: Delete Book
-
-
-@bp.route('/compose/new', methods=['GET', 'POST'])
-@login_required
-def compose_new():
-    form = ComposeForm()
-    if request.method == 'GET':
-        return render_template('compose_new.html', form=form)
-    else:
-        # creates a book
-        book_id = BookHandler.create_book(request)
-        res = {
-            'action': 'new_path',
-            'book_id': book_id
-        }
-        return jsonify(res), 200
 
 
 @bp.route('/book/<book_name>/read/<book_id>', defaults={'page_id': None, 'path_id': None})
@@ -211,11 +216,12 @@ def book_part(page_id, path_id, book_name):
     form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
-    page = ""
+    page = None
     if page_id != 'new':
         page = BookHandler.get_page_by_id(page_id)
 
     if not path_id:
+        print(page, end=' page \n')
         path_id = page['path_id']
 
     data = {
@@ -354,7 +360,7 @@ def unauthorized():
         'title': 'Need Permission',
         'message': 'Apparently you don\'t have permission for this page'
     }
-    return render_template('error.html', **data), 500
+    return render_template('error.html', **data), 403
 
 
 @bp.route('/400',)
