@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+	<div class="warpper" style="width: 700px; margin: auto">
+		<h1>Sign up</h1>
+		<form method="post">
+            {{ form.csrf_token }}
+
+            <form class="dropdown-menu p-4">
+                <div class="form-group">
+                    {{ form.username.label(for="username") }}
+                    {{ form.username(class="form-control", for="username") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(for="email") }}
+                    {{ form.email(class="form-control", for="email") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(for="password") }}
+                    {{ form.password(class="form-control", for="password") }}
+                    </div>
+                {{ form.submit(class="btn btn-light") }}
+            </form>
+            <br>
+        </form>
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+	</div>
+{% endblock %}
