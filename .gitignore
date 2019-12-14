@@ -60,6 +60,15 @@ db.sqlite3
 instance/
 .webassets-cache
 
+# Migrations
+/migrations
+
+# Pycharm
+.idea/*
+
+# VS CODE
+.vscode/*
+
 # Scrapy stuff:
 .scrapy
 
