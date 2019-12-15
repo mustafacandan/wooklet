@@ -148,9 +148,11 @@ def read_book(book_name, book_id, page_id, path_id, direction='c'):
     # If page id doesnt exist, return first page
     if len(pages) > 0 and page_id is None:
         page = pages[0]
+        data['title'] = BookHandler.get_book(page_id=page['id']).get('title')
 
     # if page id exist
     elif len(pages) > 0 and page_id:
+        data['title'] = BookHandler.get_book(page_id=page_id).get('title')
         for i, p in enumerate(pages):
             if p['id'] == page_id:
                 if direction == 'p' and i >= 1:
@@ -164,7 +166,7 @@ def read_book(book_name, book_id, page_id, path_id, direction='c'):
                         data['prev_page_id'] = pages[i].get('id')
                         options = BookHandler.get_children_by_page(page_id)
 
-    data['title'] = BookHandler.get_book(page_id=page_id).get('title')
+
     data['page'] = page
     data['options'] = options
     return render_template('read.html', **data)
