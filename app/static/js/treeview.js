@@ -14,7 +14,7 @@ $(document).ready(function() {
                 "data" : function (node, cb) {
                     $.ajax({
                     url: '/tree/get/'+bookId,
-                    type: 'GET',
+                    type: 'POST',
                     data: {
                         name: 'name'
                     },
