@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+
+  <div class="container-fluid bg-light">
+    <div class="container h-75" style="padding-top:10%">
+      <div class="row">
+        <div class="col-md-6"><img src="/assets/story-1.png" class="w-100 rad-15"></div>
+        <div class="col-md-6">
+          <h2>{{ book.title }}</h2>
+          <p>By <strong>{{ book.editors[0].username }}</strong></p>
+          <p>{{ book.description[:400] |safe }}</p>
+          </br>
+          <p><strong>Tags:</strong> {{ book.tags }}</p>
+{#          <p><strong>513 </strong>Views - <strong>123</strong> Votes</p>#}
+          <div class="float-right">
+{#            <button class="btn btn-outline-primary ml-3">SAVE <i class="far fa-save"></i></button>#}
+              <a href="/book/{{ book.title | replace(' ', '-')}}/read/{{ book.id }}">
+                <button class="btn btn-primary ml-3">START ></button>
+              </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+{% endblock body %}

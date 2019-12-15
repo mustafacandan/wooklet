@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container-fluid bg-light">
+        <div class="container h-100" style="padding-top:10%">
+            <div class="row">
+                <div class="col-md-12 w-75">
+                    <h2 class="reading-title mb-5">{{ title }}</h2>
+                    {% if options %}
+                        <div style="text-align: center;">
+                            {% for option in options.children %}
+                                <a href="/book/Macera-Tuneli/o/{{ option.id }}">
+                                    <button class="btn btn-primary m-3">{{ option.text }}</button>
+                                </a>
+                            {% endfor %}
+                            </br>
+                                <button onclick="goBack()"  class="btn btn-outline-primary mt-5">Back <i class="fas fa-chevron-circle-left"></i></button>
+                        </div>
+                    {% else %}
+                        {{ page.content | safe }}
+                        </br>
+                                <button onclick="goBack()" class="float-left btn btn-outline-primary ml-3"><i class="fas fa-chevron-circle-left"></i></button>
+                        <a href="/book/next/n/{{ page.id }}">
+                            <button class="float-right btn btn-outline-primary ml-3"><i class="fas fa-chevron-circle-right"></i></button>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>
+{% endblock body %}

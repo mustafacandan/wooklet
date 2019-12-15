@@ -52,8 +52,14 @@ def create_book(book_raw, user_id):
     return book
 
 
+def get_book_by_id(book_id):
+    book = m.Book.query.get(book_id)
+    data, err = m.BookSchema().dump(book)
+    if not err:
+        print(err)
+        return data
+
 def get_book_by_path_id(path_id):
-    print(path_id, end=" path id \n")
     path = m.Path.query.get(path_id)
 
     print(path.book_id, end=" book id \n")
@@ -203,6 +209,13 @@ def update_page(page_id, page_raw):
 def get_page_by_id(page_id):
     page = m.Page.query.get(page_id)
     return m.PageSchema().dump(page)
+
+
+def get_last_page_of_parent_path_by_page_id(page_id):
+    path_id = m.Page.query.get(page_id).path_id
+    parent_id = m.Path.query.get(path_id).parent
+    return m.Page.query.filter_by(path_id=parent_id).order_by(m.Page.created_at.desc()).first()
+    # return m.Path.query.filter(m.Path.id == parent_id).pages.order_by(m.Page.created_at.asc()).last()
 
 
 def get_pages_by_path(path_id):

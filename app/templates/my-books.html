@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block body %}
+
+  <div class="container-fluid bg-light">
+
+
+    <div class="container py-5">
+      <h1 class="text-blu text-left py-5 my-0 disp-inl">My Desk</h1><a href="/compose/new" class="btn btn-primary mb-4 ml-4">Compose New + </a>
+
+      <table class="table">
+        <thead class="bg-white" style="border-radius: 15px;">
+          <tr>
+            <th scope="col">Cover Image</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last Update</th>
+            <th scope="col">Settings</th>
+            <th scope="col">Continue</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+          <tr>
+            <td><img src="assets/story-2.png" class="table-image"></td>
+            <td class="table-title">{{ book.title }}</td>
+            <td>{{ book.status }}</td>
+            <td>{{ book.updated_at }}</td>
+            <td><a href="/book/{{ book.title }}/settings/{{ book.id }}"><i class="fas fa-wrench mt-4"></i></a></td>
+            <td><a href="/book/{{ book.title }}/parts/{{ book.id }}"><i class="fas fa-chevron-circle-right mt-4"></i></a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+
+
+
+
+    </div>
+
+
+  </div>
+{% endblock body %}

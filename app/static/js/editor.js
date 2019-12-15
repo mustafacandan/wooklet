@@ -22,6 +22,23 @@ var toolbarOptions = [
             theme: 'snow'
         });
 
+        $("#create").click(function(){
+
+                $.ajax({
+                url: '/compose/new',
+                type: 'POST',
+                data: {
+                    text: quill.container.firstChild.innerHTML,
+                    title: $("#title").val(),
+                    tags: $("#tags").val(),
+                },
+                success: function(result) {
+                    window.location.href = '/book/'+result.book_title+'/parts/'+ result.book_id;
+                },
+                });
+            });
+
+
               $("#next").click(function(){
 
                 $.ajax({

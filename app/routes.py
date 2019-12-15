@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, request, redirect, render_template, send_from_directory, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from app.services.handlers import UserHandler, BookHandler
+from werkzeug.exceptions import InternalServerError, Unauthorized, NotFound
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -10,19 +11,17 @@ from wtforms.validators import DataRequired
 from flask_ckeditor import CKEditor, CKEditorField, upload_fail, upload_success
 
 from flask import current_app
-from app.forms import compose_form, signup_form, login_form, compose_page_form
+from app.forms import ComposeForm, SignupForm, LoginForm, ComposePageForm
 bp = Blueprint('base', __name__)
 
 
 @bp.context_processor
 def context_processor():
-    user_info = None
-    if current_user.get_id():
-        user_info = current_user.username
-    general = {
-        'user_info' : user_info
+    user_info = current_user.username if current_user else None
+    data = {
+        'user_info': user_info
     }
-    return dict(general=general)
+    return dict(**data)
 
 
 @bp.route('/files/<filename>')
@@ -46,20 +45,24 @@ def upload():
 
 @bp.route('/', methods=['GET'])
 def home():
-    books = BookHandler.get_public_books()
-    return render_template('home.html', books=books), 200
+    data = {
+        'popular_books': BookHandler.get_public_books()[:3]
+    }
+    print(data['popular_books'])
+    return render_template('index.html', **data), 200
 
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    form = login_form()
+    form = LoginForm()
     if request.method == 'GET':
         return render_template('login.html', form=form)
     else:
+        err = None
         if form.validate_on_submit():
             user, err = UserHandler.check_user_information(form)
         if err:
-            return 'incorrect information login', 400
+            raise InternalServerError()
         else:
             login_user(user, remember=True, force=True)
             return redirect(url_for('base.home'))
@@ -73,7 +76,7 @@ def logout():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = signup_form()
+    form = SignupForm()
     if request.method == 'GET':
         return render_template('signup.html', form=form)
     else:
@@ -81,88 +84,98 @@ def signup():
             user = UserHandler.create_user(form)
             login_user(user, remember=True, force=True)
             return redirect(url_for('base.home'))
-    return 'incorrect information signup', 400
+    raise Unauthorized()
 
 
-@bp.route('/unauthorized', methods=['GET', 'POST'])
-def unauthorized():
-    return redirect(url_for('base.login'))
-
-
-@bp.route('/books', methods=['GET', 'POST'])
-@login_required
-def book_list():
-    if request.method == 'GET':
-        books = BookHandler.get_books()
-        return render_template('book_list.html', books=books)
-
-# TODO: Delete Book
+@bp.route('/book/<book_name>/detail/<book_id>')
+def book_landing(book_name, book_id):
+    data = {
+        'book': BookHandler.get_book(None, None, book_id)
+    }
+    return render_template('book-landing.html', **data)
 
 
 @bp.route('/compose/new', methods=['GET', 'POST'])
 @login_required
 def compose_new():
-    form = compose_form()
+    form = ComposeForm()
     if request.method == 'GET':
-        return render_template('compose_new.html', form=form)
+        data = {
+            'book_id': None,
+            'path_id': None,
+            'page_id': None
+        }
+        return render_template('compose_new.html', form=form, **data)
     else:
         # creates a book
-        book_id = BookHandler.create_book(request)
+        book = BookHandler.create_book(request)
         res = {
-            'action': 'new_path',
-            'book_id': book_id
+            'book_id': book.id,
+            'book_title': book.title
         }
         return jsonify(res), 200
 
 
+@bp.route('/my-books', methods=['GET', 'POST'])
+@login_required
+def book_list():
+    if request.method == 'GET':
+        books = BookHandler.get_books()
+        return render_template('my-books.html', books=books)
+
+# TODO: Delete Book
+
+
 @bp.route('/book/<book_name>/read/<book_id>', defaults={'page_id': None, 'path_id': None})
-@bp.route('/book/<book_name>/c/<page_id>', defaults={'book_id': None, 'path_id': None})
 @bp.route('/book/<book_name>/o/<path_id>', defaults={'book_id': None, 'page_id': None})
-def read_book(book_name, book_id, page_id, path_id):
-    print(book_id, path_id, page_id)
-    pages = []
+@bp.route('/book/<book_name>/<any(p, c, n):direction>/<page_id>', defaults={'book_id': None, 'path_id': None})
+def read_book(book_name, book_id, page_id, path_id, direction='c'):
     if page_id:
         pages = BookHandler.get_pages_by_page(page_id)
-        print(1)
     elif path_id:
         pages = BookHandler.get_pages_by_path(path_id)
-        print(2)
     else:
         pages = BookHandler.get_pages_by_book(book_id)
-        print(3)
-
 
     # if page id none return first page
     # iterate over pages
     # if matches with page_id return +1
     # if list ends show childrens
-    data = {
-        'book_title': 'Macera Tuneli',
-        'options': None,
-        'page': None
-    }
+
+    page, options, parent_page = None, None, None
+    data = {}
+
+    # If page id doesnt exist, return first page
     if len(pages) > 0 and page_id is None:
-        data['page'] = pages[0]
+        page = pages[0]
+        data['title'] = BookHandler.get_book(page_id=page['id']).get('title')
 
+    # if page id exist
     elif len(pages) > 0 and page_id:
+        data['title'] = BookHandler.get_book(page_id=page_id).get('title')
         for i, p in enumerate(pages):
-            if p['id'] == page_id and i <= len(pages) - 2:
-                data['page'] = pages[i+1]
-            elif p['id'] == page_id and i == len(pages) - 1:
-                data['page'] = {
-                    'content': 'Options',
-                    'id': ''
-                }
-                data['options'] = BookHandler.get_children_by_page(page_id)
+            if p['id'] == page_id:
+                if direction == 'p' and i >= 1:
+                    page = pages[i - 1]
+                elif direction == 'c':
+                    page = pages[i]
+                elif direction == 'n':
+                    if i <= len(pages) - 2:
+                        page = pages[i+1]
+                    elif i == len(pages) - 1:
+                        data['prev_page_id'] = pages[i].get('id')
+                        options = BookHandler.get_children_by_page(page_id)
 
 
-    return render_template('book_read.html', data=data)
+    data['page'] = page
+    data['options'] = options
+    return render_template('read.html', **data)
 
 
 @bp.route('/book/<book_name>/parts/<book_id>', methods=['GET', 'POST'])
 @login_required
 def compose_edit(book_name, book_id):
-    form = compose_form()
+    form = ComposeForm()
     if request.method == 'GET':
         # get paths with book id
         paths = BookHandler.get_paths_by_book_id(book_id)
@@ -181,7 +194,7 @@ def book_settings(book_id, book_name):
 @bp.route('/book/<book_name>/pages/<path_id>', methods=['GET'], defaults={'page_id': 'new'})
 @login_required
 def list_pages_(page_id, path_id, book_name):
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
     pages = BookHandler.get_pages_by_path(path_id)
@@ -199,14 +212,15 @@ def list_pages_(page_id, path_id, book_name):
 @login_required
 def book_part(page_id, path_id, book_name):
     print(path_id, end=' ###\n')
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
-    page = ""
+    page = None
     if page_id != 'new':
         page = BookHandler.get_page_by_id(page_id)
 
     if not path_id:
+        print(page, end=' page \n')
         path_id = page['path_id']
 
     data = {
@@ -223,7 +237,7 @@ def book_part(page_id, path_id, book_name):
 @login_required
 def compose_n(page_id, path_id, book_name):
     print(path_id, end=' ###\n')
-    form = compose_page_form()
+    form = ComposePageForm()
     paths = BookHandler.get_paths(page_id=page_id, path_id=path_id)
     book_id = BookHandler.get_book(page_id=page_id, path_id=path_id)['id']
     page = ""
@@ -242,7 +256,7 @@ def compose_n(page_id, path_id, book_name):
 @bp.route('/compose/<page_id>', methods=['GET', 'POST'])
 @login_required
 def compose(page_id):
-    form = compose_page_form()
+    form = ComposePageForm()
     if request.method == 'GET':
         data = {
             'page_id': page_id,
@@ -337,3 +351,42 @@ def next():
     # text = request.form.get('text')
     # saves the page and returns the next 
     return "", 200
+
+
+@bp.route('/unauthorized', methods=['GET'])
+def unauthorized():
+    data = {
+        'title': 'Need Permission',
+        'message': 'Apparently you don\'t have permission for this page'
+    }
+    return render_template('error.html', **data), 403
+
+
+@bp.route('/400',)
+def url_for_404():
+    raise NotFound()
+
+
+@bp.route('/500',)
+def url_for_500():
+    raise InternalServerError()
+
+
+@bp.app_errorhandler(404)
+def handle_404(err):
+    user_info = current_user.username if current_user else None
+    data = {
+        'user_info': user_info
+    }
+    return render_template('404.html', **data), 404
+
+
+@bp.app_errorhandler(500)
+def handle_500(err):
+    user_info = current_user.username if current_user else None
+    data = {
+        'user_info': user_info,
+        'title': 'Something went wrong',
+        'message': '(But don\'t worry we will take care of it.)'
+    }
+    return render_template('error.html', **data), 500

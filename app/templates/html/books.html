@@ -1,0 +1,236 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Endless End</title>
+  <!-- Favicon -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="js/jquery-3.3.1.slim.min.js"></script>
+
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/fas-all.min.js"></script>
+
+
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito:300,500,700,800&display=swap&subset=latin-ext"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style/bootstrap.min.css" />
+  <link rel="stylesheet" href="style/styles.css" />
+  <link rel="stylesheet" href="style/animate.min.css" />
+  <link rel="stylesheet" href="style/fas-all.min.css" />
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light px-lg-5 py-3">
+    <a class="navbar-brand" href="#">
+      <!--<img src="../resimler/logo.png" class="navbar-brand-logo"> -->Endless End
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <ul class="nav navbar-nav ml-auto w-100 justify-content-center">
+        <li class="nav-item active">
+          <a class="nav-link" href="/"><i class="fas fa-home "></i> Home</a>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="/books" id="navbarDropdownMenuLink" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-share-alt"></i> Books
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/books?sort=popular">Popular Books</a>
+            <a class="dropdown-item" href="/books?sort=vote">Most Voted Books</a>
+
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/my-books"><i class="fas fa-pen-fancy"></i> Compose</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/faq"><i class="fas fa-question"></i> FAQ</a>
+        </li>
+
+      </ul>
+
+    </div>
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="navbar-avatar" src="https://i.hizliresim.com/0031A8.png">
+        NAME </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/profile.html">My Profile</a>
+        <a class="dropdown-item" href="/my-library.html">My Library</a>
+        <a class="dropdown-item" href="/my-books.html">My Desk</a>
+        <a class="dropdown-item" href="/edit-profile.html">Edit Profile</a>
+        <a class="dropdown-item text-danger" href="/log-out">Log out</a>
+      </div>
+    </div>
+
+  </nav>
+
+  <div class="container-fluid bg-light">
+
+    <h1 class="text-blu text-center py-5 my-0">Books</h1>
+
+
+    <div class="container">
+      <div class="row">
+
+        <div class="filtreler">
+          <i class="fas fa-search"></i><input class="filtre-search w-50" type="text" placeholder="Search"
+            aria-label="Search">
+          <p class="my-1"><strong>Suggested Terms:</strong>
+            <a href="#" class="term"><i class="fas fa-plus"></i> Love</a>
+            <a href="#" class="term"><i class="fas fa-plus"></i> Love</a>
+            <a href="#" class="term"><i class="fas fa-plus"></i> Love</a>
+            <a href="#" class="term-active"><i class="fas fa-check"></i> Love</a></p>
+        </div>
+
+        <div class="dropdown dropdown-sort float-right">
+          <button class="btn btn-secondary dropdown-toggle rad-15" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Most Voted</a>
+            <a class="dropdown-item" href="#">Most Read</a>
+            <a class="dropdown-item" href="#">Most Recently</a>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <div class="yatay-card">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="assets/story-2.png" class="w-100 yatay-card-gorsel">
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-2 my-5">
+              <h4 class="card-title">Black Mirror: Bandersnatch</h4>
+              <p class="card-text"><i class="fas fa-user"></i> David Slade </p>
+              <p class="card-text"><i class="far fa-clock"></i> 23 Nov 2019 </p>
+
+              <div class="w-100 text-align:right pr-5">
+                <p class="card-vote align-bottom text-blu disp-inl"><b>572</b> Votes</p><span class="float-right"><span
+                    class="text-blu"><i class="fas fa-wrench fa-lg"></i></span>
+                  <button class="btn btn-outline-primary ml-3">SAVE <i class="far fa-save"></i></button>
+                  <button class="btn btn-primary ml-3">START ></button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="yatay-card">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="assets/story-2.png" class="w-100 yatay-card-gorsel">
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-2 my-5">
+              <h4 class="card-title">Black Mirror: Bandersnatch</h4>
+              <p class="card-text"><i class="fas fa-user"></i> David Slade </p>
+              <p class="card-text"><i class="far fa-clock"></i> 23 Nov 2019 </p>
+
+              <div class="w-100 text-align:right pr-5">
+                <p class="card-vote align-bottom text-blu disp-inl"><b>572</b> Votes</p><span class="float-right"><span
+                    class="text-blu"><i class="fas fa-wrench fa-lg"></i></span>
+                  <button class="btn btn-outline-primary ml-3">SAVE <i class="far fa-save"></i></button>
+                  <button class="btn btn-primary ml-3">START ></button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="yatay-card">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="assets/story-2.png" class="w-100 yatay-card-gorsel">
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-2 my-5">
+              <h4 class="card-title">Black Mirror: Bandersnatch</h4>
+              <p class="card-text"><i class="fas fa-user"></i> David Slade </p>
+              <p class="card-text"><i class="far fa-clock"></i> 23 Nov 2019 </p>
+
+              <div class="w-100 text-align:right pr-5">
+                <p class="card-vote align-bottom text-blu disp-inl"><b>572</b> Votes</p><span class="float-right"><span
+                    class="text-blu"><i class="fas fa-wrench fa-lg"></i></span>
+                  <button class="btn btn-outline-primary ml-3">SAVE <i class="far fa-save"></i></button>
+                  <button class="btn btn-primary ml-3">START ></button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="yatay-card">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="assets/story-2.png" class="w-100 yatay-card-gorsel">
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-2 my-5">
+              <h4 class="card-title">Black Mirror: Bandersnatch</h4>
+              <p class="card-text"><i class="fas fa-user"></i> David Slade </p>
+              <p class="card-text"><i class="far fa-clock"></i> 23 Nov 2019 </p>
+
+              <div class="w-100 text-align:right pr-5">
+                <p class="card-vote align-bottom text-blu disp-inl"><b>572</b> Votes</p><span class="float-right"><span
+                    class="text-blu"><i class="fas fa-wrench fa-lg"></i></span>
+                  <button class="btn btn-outline-primary ml-3">SAVE <i class="far fa-save"></i></button>
+                  <button class="btn btn-primary ml-3">START ></button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <center class="pb-5"> <span><a href="#">Load More <i class="fas fa-chevron-down"></i></a></span></center>
+  </div>
+  <footer>
+    <div class="container-fluid bg-gri pt-4 pb-2">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-3 text-left text-white">© 2019 Endless End</div>
+
+          <div class="col-md-9 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item "><a href="#">Contact / Send Feedback</a></li>
+              <li class="list-inline-item"><a href="#">About Endless End</a></li>
+              <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+              <li class="list-inline-item"><a href="#">Terms of Services</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+</body>
+
+
+
+
+
+</html>

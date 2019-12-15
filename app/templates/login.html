@@ -1,26 +1,51 @@
-{% extends "base.html" %}
+{% extends "base_wide.html" %}
 {% block body %}
-	<div class="warpper" style="width: 700px; margin: auto">
-		<h1>Login</h1>
-		<form method="post">
-            {{ form.csrf_token }}
 
-            <form class="dropdown-menu p-4">
-                <div class="form-group">
-                    {{ form.username_or_email.label(for="email") }}
-                    {{ form.username_or_email(class="form-control", for="email") }}
-                </div>
-                <div class="form-group">
-                    {{ form.password.label(for="password") }}
-                    {{ form.password(class="form-control", for="password") }}
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row p-7 mb-7">
+        <div class="col-md-6 text-right pr-5">
+          <h1 class="text-blu karsilama-2">Welcome to the </br>
+            endless world of </br>
+            endless end.</h1>
+          </br>
+          <p>Don’t you already have an account?</br>
+            Just <a href="/sign-up.html">Sign Up! </a></p>
+
+        </div>
+
+
+              <div class="col-md-6 ">
+          <div class="ml-5 w-90 p-5 account-block">
+            <h2 class="account-block-header">Sign In To <span class="text-blu">Endless End</span></h2>
+
+
+
+
+              <form method="post">
+                  {{ form.csrf_token }}
+                  <div class="form-group">
+                    <label class="input-labeli" for="email"><i class="fas fa-envelope"></i>
+                      Username or E-mail address</label>
+                      {{ form.username_or_email(id="email", class="form-control", **{'aria-describedby':"emailHelp", 'placeholder':"Enter username or email address"}) }}
+                  </div>
+                  <div class="form-group ">
+                    <label class="input-labeli" for="password"><i class="fas fa-key"></i> Password</label>
+                    <div class="input-group">
+                        {{ form.password(id="password", class="form-control mr-1",  **{'placeholder':"Password", 'type':"password"}) }}
                     </div>
-                {{ form.submit(class="btn btn-light") }}
-            </form>
-            <br>
-        </form>
-        {{ ckeditor.load() }}
-        {{ ckeditor.config(name='body') }}
-        <hr>
-        Are you new here? <a href="/signup"><button type="button" class="btn btn-light">Sign up now!</button></a>
-	</div>
-{% endblock %}
+                  </div>
+            <a href="profile.html">
+                {{ form.submit(class="btn btn-sm btn-primary w-100") }}
+            </a>
+              </form>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+{% endblock body %}

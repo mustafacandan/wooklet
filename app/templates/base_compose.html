@@ -21,7 +21,9 @@
   <link rel="stylesheet" href="/style/style_overwrites.css" />
   <link rel="stylesheet" href="/style/animate.min.css" />
   <link rel="stylesheet" href="/style/fas-all.min.css" />
+<link rel="stylesheet" href="/jstree/themes/default/style.min.css" />
 
+{##}
 </head>
 
 <body>
@@ -61,7 +63,7 @@
       {% if user_info is not none %}
 
             <div class="dropdown">
-              <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+              <button type="button" class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img class="navbar-avatar" src="https://i.hizliresim.com/0031A8.png">
                 {{  user_info }} </button>
@@ -84,27 +86,7 @@
     <!-- Page Content -->
     {% endblock %}
 
-      <footer>
-        <div class="container-fluid bg-gri pt-4 pb-2">
-          <div class="container">
-            <div class="row">
 
-              <div class="col-md-3 text-left text-white">© 2019 Endless End</div>
-
-              <div class="col-md-9 text-right">
-                <ul class="list-inline">
-                  <li class="list-inline-item "><a href="#">Contact / Send Feedback</a></li>
-                  <li class="list-inline-item"><a href="#">About Endless End</a></li>
-                  <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
-                  <li class="list-inline-item"><a href="#">Terms of Services</a></li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </footer>
 </body>
 
 

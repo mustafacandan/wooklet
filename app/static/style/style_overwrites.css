@@ -1,0 +1,32 @@
+.crop{
+  overflow: hidden;
+}
+
+.card-img-top {
+  width: unset;
+  border-radius: 15px 15px 0px 1px;
+}
+
+.card-body {
+  height: 200px;
+}
+
+.reading-title {
+  font-size: 18px;
+  color: #a2a2a2;
+}
+#treeview * {
+  font-weight: normal;
+}
+
+#editor {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  padding-bottom: 0px;
+
+}
+
+.ql-toolbar {
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
