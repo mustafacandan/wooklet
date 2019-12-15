@@ -90,6 +90,7 @@ class BookSchema(BaseSchema):
     information = fields.Dict(required=False, allow_none=True)
     editors = fields.Nested('EditorSchema', dump_only=True, many=True)
     created_at = fields.DateTime('%Y-%m-%d')
+    updated_at = fields.DateTime('%Y-%m-%d')
 
 class Ownership(BaseModel):
     is_owner = db.Column(db.Boolean, nullable=False, index=False, default=True, server_default=db.text('true'))

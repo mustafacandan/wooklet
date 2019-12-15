@@ -121,7 +121,7 @@ def compose_new():
 def book_list():
     if request.method == 'GET':
         books = BookHandler.get_books()
-        return render_template('book_list.html', books=books)
+        return render_template('my-books.html', books=books)
 
 # TODO: Delete Book
 
