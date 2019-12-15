@@ -13,13 +13,13 @@
             {% for page in data.pages %}
                 <div>
                 <p>{{ page.content | safe }}</p>
-                <a href="/book/Macera-Tuneli/page/{{ page.id }}"><button for="manager6" class="btn btn-light" style="height: 14pt; line-height: 2pt;"> Edit </button></a>
+                <a href="/book/Macera-Tuneli/page/{{ page.id }}"><button for="manager6" class="btn btn-light" > Edit </button></a>
 
                 </div>
             {% endfor %}
                 <div>
                 <p></p>
-                <a href="/book/Macera-Tuneli/page/new/{{ data.path_id }}"><button for="manager6" class="btn btn-light" style="height: 14pt; line-height: 2pt;"> New </button></a>
+                <a href="/book/Macera-Tuneli/page/new/{{ data.path_id }}"><button for="manager6" class="btn btn-light" > New </button></a>
 
                 </div>
             <div class="mt-3"></div>
