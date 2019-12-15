@@ -112,11 +112,6 @@ class Path(BaseModel):
     pages = db.relationship('Page', backref=db.backref('path', lazy=True), uselist=False)
 
 
-class PathSchemaStop(BaseSchema):
-    class Meta:
-        exclude = ('created_at', 'updated_at', 'parent_id')
-    text = fields.Str(required=False, allow_none=True)
-
 class PathSchema(BaseSchema):
     book_id = fields.UUID(required=False, allow_none=True)
     text = fields.Str(required=False, allow_none=True)
@@ -124,11 +119,17 @@ class PathSchema(BaseSchema):
     children = fields.Nested('PathSchema', dump_only=True, many=True)
 
 
+class PathSchemaLast(BaseSchema):
+    class Meta:
+        exclude = ('created_at', 'updated_at', 'parent_id')
+    text = fields.Str(required=False, allow_none=True)
+
+
 class PathSchemaChildren(BaseSchema):
     class Meta:
         exclude = ('created_at', 'updated_at', 'parent_id')
     text = fields.Str(required=False, allow_none=True)
-    children = fields.Nested('PathSchemaStop', dump_only=True, many=True)
+    children = fields.Nested('PathSchemaLast', dump_only=True, many=True)
 
 
 class PathSchemaRoot(BaseSchema):

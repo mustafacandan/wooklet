@@ -211,6 +211,13 @@ def get_page_by_id(page_id):
     return m.PageSchema().dump(page)
 
 
+def get_last_page_of_parent_path_by_page_id(page_id):
+    path_id = m.Page.query.get(page_id).path_id
+    parent_id = m.Path.query.get(path_id).parent
+    return m.Page.query.filter_by(path_id=parent_id).order_by(m.Page.created_at.desc()).first()
+    # return m.Path.query.filter(m.Path.id == parent_id).pages.order_by(m.Page.created_at.asc()).last()
+
+
 def get_pages_by_path(path_id):
     pages = m.Page.query.filter_by(path_id=path_id).order_by(m.Page.created_at.asc()).all()
     return m.PageSchema().dump(pages, many=True)

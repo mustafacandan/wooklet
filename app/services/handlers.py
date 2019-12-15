@@ -109,6 +109,12 @@ class BookHandler:
             }
             return q.update_page(page_id, page_raw)
 
+
+    @classmethod
+    def get_parent_page(cls, page_id):
+        return q.get_last_page_of_parent_path_by_page_id(page_id)
+
+
     @classmethod
     def delete_path(cls, id):
         data, _err = q.delete_path(id)

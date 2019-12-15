@@ -17,7 +17,7 @@ bp = Blueprint('base', __name__)
 
 @bp.context_processor
 def context_processor():
-    user_info = current_user if current_user.username else None
+    user_info = current_user.username if current_user else None
     data = {
         'user_info': user_info
     }
@@ -127,47 +127,47 @@ def book_list():
 
 
 @bp.route('/book/<book_name>/read/<book_id>', defaults={'page_id': None, 'path_id': None})
-@bp.route('/book/<book_name>/c/<page_id>', defaults={'book_id': None, 'path_id': None})
 @bp.route('/book/<book_name>/o/<path_id>', defaults={'book_id': None, 'page_id': None})
-def read_book(book_name, book_id, page_id, path_id):
-    print(book_id, path_id, page_id)
-    pages = []
+@bp.route('/book/<book_name>/<any(p, c, n):direction>/<page_id>', defaults={'book_id': None, 'path_id': None})
+def read_book(book_name, book_id, page_id, path_id, direction='c'):
     if page_id:
         pages = BookHandler.get_pages_by_page(page_id)
-        print(1)
     elif path_id:
         pages = BookHandler.get_pages_by_path(path_id)
-        print(2)
     else:
         pages = BookHandler.get_pages_by_book(book_id)
-        print(3)
-
 
     # if page id none return first page
     # iterate over pages
     # if matches with page_id return +1
     # if list ends show childrens
-    data = {
-        'book_title': 'Macera Tuneli',
-        'options': None,
-        'page': None
-    }
-    if len(pages) > 0 and page_id is None:
-        data['page'] = pages[0]
 
+    page, options, parent_page = None, None, None
+    data = {}
+
+    # If page id doesnt exist, return first page
+    if len(pages) > 0 and page_id is None:
+        page = pages[0]
+
+    # if page id exist
     elif len(pages) > 0 and page_id:
         for i, p in enumerate(pages):
-            if p['id'] == page_id and i <= len(pages) - 2:
-                data['page'] = pages[i+1]
-            elif p['id'] == page_id and i == len(pages) - 1:
-                data['page'] = {
-                    'content': 'Options',
-                    'id': ''
-                }
-                data['options'] = BookHandler.get_children_by_page(page_id)
+            if p['id'] == page_id:
+                if direction == 'p' and i >= 1:
+                    page = pages[i - 1]
+                elif direction == 'c':
+                    page = pages[i]
+                elif direction == 'n':
+                    if i <= len(pages) - 2:
+                        page = pages[i+1]
+                    elif i == len(pages) - 1:
+                        data['prev_page_id'] = pages[i].get('id')
+                        options = BookHandler.get_children_by_page(page_id)
 
-
-    return render_template('book_read.html', data=data)
+    data['title'] = BookHandler.get_book(page_id=page_id).get('title')
+    data['page'] = page
+    data['options'] = options
+    return render_template('read.html', **data)
 
 
 @bp.route('/book/<book_name>/parts/<book_id>', methods=['GET', 'POST'])
@@ -372,7 +372,7 @@ def url_for_500():
 
 @bp.app_errorhandler(404)
 def handle_404(err):
-    user_info = current_user if current_user.username else None
+    user_info = current_user.username if current_user else None
     data = {
         'user_info': user_info
     }
@@ -381,7 +381,7 @@ def handle_404(err):
 
 @bp.app_errorhandler(500)
 def handle_500(err):
-    user_info = current_user if current_user.username else None
+    user_info = current_user.username if current_user else None
     data = {
         'user_info': user_info,
         'title': 'Something went wrong',

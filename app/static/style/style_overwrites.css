@@ -10,3 +10,8 @@
 .card-body {
   height: 200px;
 }
+
+.reading-title {
+  font-size: 18px;
+  color: #a2a2a2;
+}
