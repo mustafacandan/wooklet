@@ -17,7 +17,7 @@ bp = Blueprint('base', __name__)
 
 @bp.context_processor
 def context_processor():
-    user_info = current_user.username if current_user else None
+    user_info = current_user.username if current_user.get_id() else None
     data = {
         'user_info': user_info
     }
@@ -374,7 +374,7 @@ def url_for_500():
 
 @bp.app_errorhandler(404)
 def handle_404(err):
-    user_info = current_user.username if current_user else None
+    user_info = current_user.username if current_user.get_id() else None
     data = {
         'user_info': user_info
     }
@@ -383,7 +383,7 @@ def handle_404(err):
 
 @bp.app_errorhandler(500)
 def handle_500(err):
-    user_info = current_user.username if current_user else None
+    user_info = current_user if current_user and current_user.get_id() else None
     data = {
         'user_info': user_info,
         'title': 'Something went wrong',
