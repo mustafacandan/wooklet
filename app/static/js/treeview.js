@@ -114,7 +114,6 @@ $(document).ready(function() {
                     name: data.text
                 },
                 success: function(result) {
-                    console.log(result)
                     quill.setContents([{ insert: '\n' }]);
                 },
                 });
@@ -128,7 +127,6 @@ $(document).ready(function() {
                 'dummy':'data'
                 },
                 success: function(result) {
-                        console.log(result.id);
                         $('#treeview').jstree(true).refresh();
                     },
                 });
@@ -142,7 +140,6 @@ $(document).ready(function() {
                 'dummy':'data'
                 },
                 success: function(result) {
-                        console.log(result);
                     },
                 });
 
@@ -151,11 +148,13 @@ $(document).ready(function() {
                 //selected node text: data.inst.get_json()[0].data
                 window.location.href = '/book/Macera-Tuneli/edit/'+ data.node.id;
             }
-        );
-        // {# Activates the menu on mobile #}
-        $("#treeview").on("taphold", ".jstree-anchor", function (e) {
-            console.log(e)
+        ).on('select_node.jstree', function (e, data) {
+            setTimeout(function() {
+                data.instance.show_contextmenu(data.node)
+            }, 100);
         });
+        // {# Activates the menu on mobile #}
+
 
 
 });
